@@ -6,14 +6,13 @@
 		<div align="center">
 			{{ with $g := . }}
 			<div style="width:1024;">
-				<video id="video-player" width="1024" height="600" class="video-js vjs-default-skin" controls>
-					<source src="{{ $g.VideoSrc }}" type="video/mp4">
+				<video id="video-player" width="1024" height="600" class="video-js vjs-default-skin"  src="{{ $g.VideoSrc }}" type='video/x-matroska; codecs="theora, vorbis"' autoplay controls>
 				</video>
 				<div align="left">
-				<h1>
-					{{ $g.VideoName }}
-				</h1>
-				<em>clipped by admin</em>
+					<h1>
+						{{ $g.VideoName }}
+					</h1>
+					<em>clipped by admin</em>
 				</div>
 			</div>
 			{{ end }}
