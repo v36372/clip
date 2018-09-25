@@ -4,8 +4,8 @@ import (
 	"clip/app/entity"
 	"clip/config"
 	"clip/repo"
-	gintemplate "gin-template"
 
+	gintemplate "github.com/foolin/gin-template"
 	"github.com/gin-gonic/gin"
 )
 
