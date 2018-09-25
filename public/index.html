@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<style>
+.time{
+	width:70px;
+}
+		</style>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<div align="center">
+			{{ with $g := . }}
+			<div style="width:1024;">
+				<video id="video-player" width="1024" height="600" class="video-js vjs-default-skin" controls>
+					<source src="/vids/output5.mp4" type="video/mp4">
+				</video>
+			</div>
+			<form method="post" action="/cut">
+				<div class="form-row col-md-8">
+					<span class="col-md-2">Create clip from</span>
+					<div class="col-md-1">
+						<input placeholder="minute" class="time form-control" type="number" name="minute_from" value="0" id="minute_from"/>:
+						<input placeholder="seconds" class="time form-control" type="number" name="second_from" value="0" id="second_from"/>
+					</div>
+
+					<span class="col-md-1">to</span>
+					<div class="col-md-1">
+						<input placeholder="minute" class="time form-control" type="number" value="0" name="minute_to"/>:
+						<input placeholder="seconds" class="time form-control" type="number" value="0" name="second_to"/>
+					</div>
+					<span class="col-md-1" style="margin-left:200px;">Clip title:</span>
+					<div class="col-md-2">
+						<input required placeholder="pistol ace ?" class="time form-control" value="" name="name"/>
+					</div>
+				</div>
+				<button type="button" class="btn btn-primary">Preview</button>
+				<button type="submit" class="btn btn-success">Cut!</button>
+			</form>
+			<p style="color:red;"><em>{{ $g.Flashes }}</em></p>
+			{{ end }}
+		</div>
+	</body>
+	<script>
+$(".btn.btn-primary").on("click", function(e){
+	v = $("#video-player")[0];
+	minute = $("#minute_start").val() || 0
+		second = $("#second_start").val() || 0
+		console.log(minute*60+second)
+		v.currentTime = minute*60+second;  
+	v.play();
+})
+	</script>
+</html>
