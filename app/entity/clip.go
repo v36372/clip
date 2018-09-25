@@ -3,10 +3,10 @@ package entity
 import (
 	"clip/models"
 	"clip/repo"
+	"clip/utilities"
 	"clip/utilities/uer"
 	"errors"
 	"fmt"
-	"master/utils"
 	"os/exec"
 	"strings"
 )
