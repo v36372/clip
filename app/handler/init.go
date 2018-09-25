@@ -48,8 +48,8 @@ func InitEngine(conf *config.Config) *gin.Engine {
 
 	groupIndex := r.Group("")
 	groupIndex.GET("/", clipHandler.New)
-	groupIndex.GET("/clip", clipHandler.Watch)
-	groupIndex.GET("/clip/:slug", clipHandler.Watch)
+	groupIndex.GET("/s", clipHandler.Watch)
+	groupIndex.GET("/s/:slug", clipHandler.Watch)
 	groupIndex.POST("/cut", clipHandler.Cut)
 
 	return r

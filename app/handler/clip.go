@@ -109,5 +109,5 @@ func (h clipHandler) Cut(c *gin.Context) {
 		return
 
 	}
-	c.Redirect(302, fmt.Sprintf("/clip/%s", clip.Slug))
+	c.Redirect(302, fmt.Sprintf("/s/%s", clip.Slug))
 }
