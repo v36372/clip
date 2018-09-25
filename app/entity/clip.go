@@ -166,7 +166,7 @@ func (c clipEntity) CreateClip(mf, mt, sf, st int, name, user string) (clip *mod
 }
 
 func (c clipEntity) ExecuteCutCommand(mf, mt, sf, st int, name string) error {
-	cmd := fmt.Sprintf("ffmpeg -i ./vids/output5.mp4 -ss 00:%d:%d -t 00:%d:%d -async 1 -y -strict -2 ./vids/%s.mp4", mf, sf, mt, st, name)
+	cmd := fmt.Sprintf("ffmpeg -i ./vids/latest.mkv -ss 00:%d:%d -t 00:%d:%d -async 1 -y -strict -2 ./vids/%s.mkv", mf, sf, mt, st, name)
 	_, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		return err

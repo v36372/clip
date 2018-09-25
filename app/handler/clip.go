@@ -106,7 +106,6 @@ func (h clipHandler) Cut(c *gin.Context) {
 			Flashes: "something went wrong",
 		}
 		c.HTML(200, "index.html", presenter)
-		fmt.Println(err)
 		return
 
 	}
