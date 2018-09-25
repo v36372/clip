@@ -13,8 +13,7 @@
 		<div align="center">
 			{{ with $g := . }}
 			<div style="width:1024;">
-				<video id="video-player" width="1024" height="600" class="video-js vjs-default-skin" controls>
-					<source src="/vids/output5.mp4" type="video/mp4">
+				<video id="video-player" width="1024" height="600" class="video-js vjs-default-skin"  src="/vids/latest.mkv" type='video/x-matroska; codecs="theora, vorbis"' autoplay controls>
 				</video>
 			</div>
 			<form method="post" action="/cut">
