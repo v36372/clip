@@ -143,7 +143,7 @@ func (c clipEntity) CreateClip(mf, mt, sf, st int, name, user string) (clip *mod
 
 	encodedId := encode(clip.Id)
 	clip.Slug = encodedId
-	clip.Url = fmt.Sprintf("/vids/%s.mp4", encodedId)
+	clip.Url = fmt.Sprintf("/vids/%s.mkv", encodedId)
 	err = c.clipRepo.Update(clip)
 	if err != nil {
 		err = uer.InternalError(err)

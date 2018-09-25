@@ -43,7 +43,7 @@ func (h clipHandler) Watch(c *gin.Context) {
 	}
 
 	presenter := Presenter{
-		VideoSrc:  fmt.Sprintf("/vids/%s.mp4", clip.Slug),
+		VideoSrc:  clip.Url,
 		VideoName: clip.Name,
 	}
 	c.HTML(200, "clip.html", presenter)
