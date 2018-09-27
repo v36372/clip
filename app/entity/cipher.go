@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"master/utils"
+	"clip/utilities"
 	"strings"
 )
 
