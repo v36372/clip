@@ -7,7 +7,7 @@ echo "-----------"
 echo "BEGIN EXTRACTING MKV FROM STREAM CHUNKS"
 echo ""
 echo "+ STEP 1: GET 10 LATEST STREAM CHUNKS FILES"
-a=`ls -Art ./stream | tail -n 1 | cut -d'-' -f 2 | cut -d'.' -f 1`
+a=`ls -Art ./stream/hls | tail -n 1 | cut -d'-' -f 2 | cut -d'.' -f 1`
 b=$(($a-10))
 if [[ -z "$a"   ]]; then
 	echo "   NO STREAM CHUNKS FOUND; ABORT"

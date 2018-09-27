@@ -90,7 +90,7 @@ func (c clipEntity) CreateClip(mf, mt, sf, st int, filename, name, user string) 
 }
 
 func (c clipEntity) ExtractFromStream() (filename string, err error) {
-	b, err := exec.Command("sh", "-c", "echo `ls -Art ./stream | tail -n 1 | cut -d'-' -f 2 | cut -d'.' -f 1`").CombinedOutput()
+	b, err := exec.Command("sh", "-c", "echo `ls -Art ./stream/hls | tail -n 1 | cut -d'-' -f 2 | cut -d'.' -f 1`").CombinedOutput()
 	if err != nil {
 		return
 	}
