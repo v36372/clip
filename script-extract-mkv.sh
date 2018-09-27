@@ -19,7 +19,7 @@ if [[ "$b" -lt 0   ]]; then
 fi
 echo "   STREAM CHUNK FILES COMBINED INTO 1 FILE"
 echo ""
-for ((i=$b;i<=$a;i++)); do cat ./stream/laptrinhstream-${i}.ts >> ./new.ts; done
+for ((i=$b;i<=$a;i++)); do cat ./stream/hls/laptrinhstream-${i}.ts >> ./new.ts; done
 #ffmpeg -i new.ts -c:v libx264 -c:a copy -bsf:a aac_adtstoasc -y new.mp4
 echo ""
 echo ""
