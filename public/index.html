@@ -148,9 +148,10 @@
 		<div align="center">
 			{{ with $g := . }}
 			<div style="width:1024;">
-				<video id="video-player" width="1024" height="600" class="video-js vjs-default-skin"  src="/vids/latest.mkv" type='video/x-matroska; codecs="theora, vorbis"' autoplay controls>
+				<video id="video-player" width="1024" height="600" class="video-js vjs-default-skin"  src="{{ $g.VideoSrc }}" type='video/x-matroska; codecs="theora, vorbis"' autoplay controls>
 				</video>
 			</div>
+            </br>
 			<form method="post" action="/cut">
 				<div class="form-row col-md-8">
 					<span class="col-md-2">Create clip from</span>
@@ -169,6 +170,7 @@
 						<input required placeholder="pistol ace ?" class="time form-control" value="" name="name"/>
 					</div>
 				</div>
+                <input required value="{{ $g.VideoName }}" name="filename" style="display:none;"/>
 				<button type="button" class="btn btn-primary">Preview</button>
 				<button type="submit" class="btn btn-success">Cut!</button>
 			</form>

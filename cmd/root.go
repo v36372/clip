@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/spf13/cobra"
@@ -10,9 +11,11 @@ import (
 )
 
 var (
-	once           sync.Once
-	rootConfigFile string
-	rootViper      = viper.New()
+	once             sync.Once
+	rootConfigFile   string
+	rootViper        = viper.New()
+	customConfigFile string
+	customViper      = viper.New()
 
 	// rootCmd represents the base command when called without any subcommands
 	rootCmd *cobra.Command
@@ -38,7 +41,7 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initRootConfig)
+	cobra.OnInitialize(initCustomConfig, initRootConfig)
 
 	rootCmd = &cobra.Command{
 		Use:   "CLI",
@@ -51,9 +54,19 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	pflags := rootCmd.PersistentFlags()
-	pflags.StringVar(&rootConfigFile, "rootConfig", "config/config.yaml", "root config file, could be overrided (default is $GOPATH/src/chainstack/config/config.yaml)")
+	pflags.StringVar(&rootConfigFile, "rootConfig", "config/config.yaml", "root config file, could be overrided (default is $GOPATH/src/clip/config/config.yaml)")
+	pflags.StringVar(&customConfigFile, "config", "config/config.yaml", "custom config file")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
+}
+
+func initCustomConfig() {
+	if customConfigFile != "" {
+		customViper.SetConfigFile(customConfigFile)
+		if err := customViper.ReadInConfig(); err != nil {
+			fmt.Println("WARNING: file config/config.yaml not exist")
+		}
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -61,6 +74,17 @@ func initRootConfig() {
 	if rootConfigFile != "" {
 		// Use config file from the flag.
 		rootViper.SetConfigFile(rootConfigFile)
+	} else {
+		envGoPath := os.Getenv("GOPATH")
+		goPaths := filepath.SplitList(envGoPath)
+		if len(goPaths) == 0 {
+			panic("$GOPATH is not set")
+		}
+		for _, goPath := range goPaths {
+			configDir := filepath.Join(goPath, "src", "clip", "config")
+			rootViper.AddConfigPath(configDir)
+		}
+		rootViper.SetConfigName("config")
 	}
 	// If a config file is found, read it in.
 	if err := rootViper.ReadInConfig(); err != nil {
@@ -69,5 +93,10 @@ func initRootConfig() {
 }
 
 func GetViper() *viper.Viper {
+	once.Do(func() {
+		for _, key := range customViper.AllKeys() {
+			rootViper.Set(key, customViper.Get(key))
+		}
+	})
 	return rootViper
 }

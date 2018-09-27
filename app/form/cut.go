@@ -10,6 +10,7 @@ type CutForm struct {
 	SecondFrom string `form:"second_from"`
 	SecondTo   string `form:"second_to"`
 	Name       string `form:"name"`
+	Filename   string `form:"filename"`
 }
 
 func (cutForm *CutForm) FromCtx(c *gin.Context) error {

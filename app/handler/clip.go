@@ -22,6 +22,15 @@ func init() {
 
 func (h clipHandler) New(c *gin.Context) {
 	presenter := Presenter{}
+
+	filename, err := h.clip.ExtractFromStream()
+	if err != nil {
+		presenter.Flashes = "something went wrong, try retry?"
+	}
+
+	presenter.VideoSrc = fmt.Sprintf("/vids/%s.mkv", filename)
+	presenter.VideoName = filename
+
 	c.HTML(200, "index.html", presenter)
 }
 
@@ -52,7 +61,7 @@ func (h clipHandler) Watch(c *gin.Context) {
 func (h clipHandler) Cut(c *gin.Context) {
 	if lock == 0 {
 		presenter := Presenter{
-			Flashes: "there is someone clipping right now, our server can only support 1 clipping operation at a time",
+			Flashes: "there is someone clipping right now, our server can only handle 1 clipping operation at a time",
 		}
 		c.HTML(200, "index.html", presenter)
 		return
@@ -100,7 +109,7 @@ func (h clipHandler) Cut(c *gin.Context) {
 		return
 	}
 
-	clip, err := h.clip.CreateClip(mf, mt, sf, st, cutForm.Name, "admin")
+	clip, err := h.clip.CreateClip(mf, mt, sf, st, cutForm.Filename, cutForm.Name, "admin")
 	if err != nil {
 		presenter := Presenter{
 			Flashes: "something went wrong",

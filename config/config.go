@@ -58,8 +58,9 @@ func load() {
 	})
 }
 
-func Load() {
+func Load() Config {
 	load()
+	return conf
 }
 
 func Get() Config {

@@ -19,6 +19,7 @@ func init() {
 
 type IClip interface {
 	GetById(id int) (*models.Clip, error)
+	GetLatest(offset, limit int) (clips []models.Clip, err error)
 	Create(*models.Clip) (*models.Clip, error)
 	Delete(*models.Clip) error
 	Update(*models.Clip) error
@@ -47,4 +48,15 @@ func (c clip) GetById(id int) (*models.Clip, error) {
 		return nil, nil
 	}
 	return &clip, err
+}
+
+func (c clip) GetLatest(offset, limit int) (clips []models.Clip, err error) {
+	err = infra.PostgreSql.Model(models.Clip{}).
+		Order("created_at DESC").
+		Limit(limit).
+		Offset(offset).
+		Find(&clips).
+		Error
+
+	return clips, err
 }
