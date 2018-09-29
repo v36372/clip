@@ -41,9 +41,11 @@ func (h clipHandler) Watch(c *gin.Context) {
 		return
 	}
 
+	presenter := Presenter{}
 	clip, err := h.clip.GetClipFromSlug(slug)
 	if err != nil {
-		uer.HandleErrorGin(err, c)
+		presenter.Flashes = err.Error()
+		c.HTML(200, "clip.html", presenter)
 		return
 	}
 	if clip == nil {
@@ -51,10 +53,8 @@ func (h clipHandler) Watch(c *gin.Context) {
 		return
 	}
 
-	presenter := Presenter{
-		VideoSrc:  clip.Url,
-		VideoName: clip.Name,
-	}
+	presenter.VideoSrc = clip.Url
+	presenter.VideoName = clip.Name
 	c.HTML(200, "clip.html", presenter)
 }
 

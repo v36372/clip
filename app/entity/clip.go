@@ -40,6 +40,11 @@ func (c clipEntity) GetClipFromSlug(slug string) (clip *models.Clip, err error) 
 		return
 	}
 
+	if clip.IsReady == false {
+		err = uer.NotFoundError(errors.New("Sorry but your clip is not ready yet, wait about 1 minute for the cutting operation to complete"))
+		return
+	}
+
 	return
 }
 
@@ -47,6 +52,7 @@ func (c clipEntity) CreateClip(mf, mt, sf, st int, filename, name, user string) 
 	clip = &models.Clip{
 		Name:      name,
 		CreatedBy: user,
+		IsReady:   false,
 	}
 	clip, err = c.clipRepo.Create(clip)
 	if err != nil {
@@ -74,17 +80,26 @@ func (c clipEntity) CreateClip(mf, mt, sf, st int, filename, name, user string) 
 		return
 	}
 
-	err = c.ExecuteCutCommand(mf, mt, sf, st, filename, clip.Slug)
-	if err != nil {
-		err = c.clipRepo.Delete(clip)
+	go func() {
+		err = c.ExecuteCutCommand(mf, mt, sf, st, filename, clip.Slug)
 		if err != nil {
+			err = c.clipRepo.Delete(clip)
+			if err != nil {
+				err = uer.InternalError(err)
+				return
+			}
+
 			err = uer.InternalError(err)
 			return
 		}
 
-		err = uer.InternalError(err)
-		return
-	}
+		clip.IsReady = true
+		err = c.clipRepo.Update(clip)
+		if err != nil {
+			err = uer.InternalError(err)
+			return
+		}
+	}()
 
 	return clip, nil
 }
@@ -107,7 +122,7 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 }
 
 func (c clipEntity) ExecuteCutCommand(mf, mt, sf, st int, filename, name string) error {
-	cmd := fmt.Sprintf("`./script-cut.sh %s %d %d %d %d %s` &>> logs.script.log", filename, mf, sf, mt, st, name)
+	cmd := fmt.Sprintf("`./script-cut.sh %s %d %d %d %d %s` &>> logs/script.log", filename, mf, sf, mt, st, name)
 	_, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		return err

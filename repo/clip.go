@@ -52,6 +52,7 @@ func (c clip) GetById(id int) (*models.Clip, error) {
 
 func (c clip) GetLatest(offset, limit int) (clips []models.Clip, err error) {
 	err = infra.PostgreSql.Model(models.Clip{}).
+		Where("is_ready = true").
 		Order("created_at DESC").
 		Limit(limit).
 		Offset(offset).

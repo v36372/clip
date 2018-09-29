@@ -7,6 +7,7 @@ type Clip struct {
 	Name      string
 	Url       string
 	Slug      string
+	IsReady   bool
 	CreatedBy string
 	CreatedAt time.Time
 }
