@@ -30,6 +30,7 @@ func InitEngine(conf *config.Config) *gin.Engine {
 
 	// ----------------------   INIT STATIC
 	r.Static("vids", "./vids")
+	r.Static("r", "./r")
 
 	templateConfig := gintemplate.TemplateConfig{
 		Root:      "public",

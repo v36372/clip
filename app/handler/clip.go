@@ -28,7 +28,7 @@ func (h clipHandler) New(c *gin.Context) {
 		presenter.Flashes = "something went wrong, try retry?"
 	}
 
-	presenter.VideoSrc = fmt.Sprintf("/vids/%s.mkv", filename)
+	presenter.VideoSrc = fmt.Sprintf("/r/%s.mkv", filename)
 	presenter.VideoName = filename
 
 	c.HTML(200, "index.html", presenter)

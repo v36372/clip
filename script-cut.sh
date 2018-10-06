@@ -6,7 +6,7 @@ mt=$4
 st=$5
 outfile=$6
 echo ""
-echo "-----------"
+echo "----------------------------------------------"
 
 ############ STEP 1
 echo "+ STEP 1: BEGIN CUTTING MKV FROM INPUT FILE"

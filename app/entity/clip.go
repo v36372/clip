@@ -139,13 +139,14 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 	dirname := strings.TrimSpace(string(b))
 	filename = path.Join(dirname, filename)
 
-	if existFile(filename) {
+	if existFile(path.Join("r", fmt.Sprintf("%s.mkv", filename))) {
 		return filename, nil
 	}
 
-	cmd := fmt.Sprintf("`./script-extract-mkv.sh %s` &>> ./log/script.log", filename)
+	cmd := fmt.Sprintf("`./script-extract-mkv.sh %s >> ./log/script.log`", filename)
 	_, err = exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
@@ -153,9 +154,10 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 }
 
 func (c clipEntity) ExecuteCutCommand(mf, mt, sf, st int, filename, name string) error {
-	cmd := fmt.Sprintf("`./script-cut.sh %s %d %d %d %d %s` &>> ./log/script.log", filename, mf, sf, mt, st, name)
+	cmd := fmt.Sprintf("`./script-cut.sh %s %d %d %d %d %s` >> ./log/script.log", filename, mf, sf, mt, st, name)
 	_, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 

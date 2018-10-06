@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -daystart -mtime 1 -delete
+find ./r/ -daystart -mtime 0 -type f -delete
