@@ -26,7 +26,7 @@ if [[ "$b" -lt 0   ]]; then
 fi
 echo "   STREAM CHUNK FILES COMBINED INTO 1 FILE"
 echo ""
-for ((i=$b;i<=$a;i++)); do cat ./stream/hls/laptrinhstream-${i}.ts >> ./new.ts; done
+for ((i=$b;i<=$a;i++)); do cat ./stream/hls/laptrinhstream-${i}.ts >> $S_DIR/$STREAM_DIR/${a}.ts; done
 #ffmpeg -i new.ts -c:v libx264 -c:a copy -bsf:a aac_adtstoasc -y new.mp4
 echo ""
 echo ""
@@ -35,7 +35,7 @@ echo ""
 echo "+ STEP 2: ENCODING ts FILES TO MKV $S_DIR/$STREAM_DIR/${a}.mkv"
 ffmpeg -i new.ts -c:v copy -c:a aac -strict -2 -y $S_DIR/$STREAM_DIR/${a}.mkv
 echo ""
-rm new.ts
+rm $S_DIR/$STREAM_DIR/${a}.ts
 #mv new.mp4 old.mp4
 #mv new.mkv latest.mkv
 
