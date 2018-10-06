@@ -120,13 +120,14 @@ func existFile(path string) bool {
 	if stat.IsDir() {
 		return false
 	}
+	fmt.Printf("--------- file size : %d\n", stat.Size())
 	if stat.Size() == 0 {
 		return false
 	}
 	return true
 }
 
-func (c clipEntity) ExtractFromStream() (filename string, err error) {
+func (c clipEntity) executeExtractScript() (filename string, err error) {
 	b, err := exec.Command("sh", "-c", "echo `ls -Art ./stream/hls | tail -n 1 | cut -d'-' -f 2 | cut -d'.' -f 1`").CombinedOutput()
 	if err != nil {
 		return
@@ -153,6 +154,26 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 		return
 	}
 
+	return
+}
+
+func (c clipEntity) ExtractFromStream() (filename string, err error) {
+	retries := 2
+
+	for retries > 0 {
+		filename, err = c.executeExtractScript()
+		if err != nil {
+			retries--
+			continue
+		}
+
+		if existFile(path.Join("r", fmt.Sprintf("%s.mkv", filename))) {
+			return filename, nil
+		}
+		retries--
+	}
+
+	err = uer.InternalError(errors.New("Extracting video failed"))
 	return
 }
 
