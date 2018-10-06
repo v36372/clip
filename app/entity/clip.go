@@ -6,7 +6,9 @@ import (
 	"clip/utilities/uer"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
+	"path"
 	"strings"
 )
 
@@ -110,6 +112,17 @@ func (c clipEntity) CreateClip(mf, mt, sf, st int, filename, name, user string) 
 	return clip, nil
 }
 
+func existFile(path string) bool {
+	stat, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false
+	}
+	if stat.IsDir() {
+		return false
+	}
+	return true
+}
+
 func (c clipEntity) ExtractFromStream() (filename string, err error) {
 	b, err := exec.Command("sh", "-c", "echo `ls -Art ./stream/hls | tail -n 1 | cut -d'-' -f 2 | cut -d'.' -f 1`").CombinedOutput()
 	if err != nil {
@@ -117,6 +130,18 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 	}
 
 	filename = strings.TrimSpace(string(b))
+
+	b, err = exec.Command("sh", "-c", "echo `date +\"%Y%m%d\"`").CombinedOutput()
+	if err != nil {
+		return
+	}
+
+	dirname := strings.TrimSpace(string(b))
+	filename = path.Join(dirname, filename)
+
+	if existFile(filename) {
+		return filename, nil
+	}
 
 	cmd := fmt.Sprintf("`./script-extract-mkv.sh %s` &>> ./log/script.log", filename)
 	_, err = exec.Command("sh", "-c", cmd).Output()
