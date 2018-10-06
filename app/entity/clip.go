@@ -13,6 +13,10 @@ import (
 	"time"
 )
 
+const (
+	hls_fragment_length = 7
+)
+
 type clipEntity struct {
 	clipRepo repo.IClip
 }
@@ -172,7 +176,8 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 			return filename, nil
 		}
 		retries--
-		time.Sleep(5 * time.Second)
+		// wait for the next fragment
+		time.Sleep(hls_fragment_length * time.Second)
 	}
 
 	err = uer.InternalError(errors.New("Extracting video failed"))
