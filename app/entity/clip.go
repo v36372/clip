@@ -81,22 +81,28 @@ func (c clipEntity) CreateClip(mf, mt, sf, st int, filename, name, user string) 
 	}
 
 	go func() {
+		defer func() {
+			if e := recover(); e != nil {
+				fmt.Printf("Cut command failed: %s", e)
+			}
+		}()
+
 		err = c.ExecuteCutCommand(mf, mt, sf, st, filename, clip.Slug)
 		if err != nil {
+			fmt.Println(err)
 			err = c.clipRepo.Delete(clip)
 			if err != nil {
-				err = uer.InternalError(err)
+				fmt.Println(err)
 				return
 			}
 
-			err = uer.InternalError(err)
 			return
 		}
 
 		clip.IsReady = true
 		err = c.clipRepo.Update(clip)
 		if err != nil {
-			err = uer.InternalError(err)
+			fmt.Println(err)
 			return
 		}
 	}()
@@ -112,7 +118,7 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 
 	filename = strings.TrimSpace(string(b))
 
-	cmd := fmt.Sprintf("`./script-extract-mkv.sh %s` &>> logs/script.log", filename)
+	cmd := fmt.Sprintf("`./script-extract-mkv.sh %s` &>> ./log/script.log", filename)
 	_, err = exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		return
@@ -122,7 +128,7 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 }
 
 func (c clipEntity) ExecuteCutCommand(mf, mt, sf, st int, filename, name string) error {
-	cmd := fmt.Sprintf("`./script-cut.sh %s %d %d %d %d %s` &>> logs/script.log", filename, mf, sf, mt, st, name)
+	cmd := fmt.Sprintf("`./script-cut.sh %s %d %d %d %d %s` &>> ./log/script.log", filename, mf, sf, mt, st, name)
 	_, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		return err
