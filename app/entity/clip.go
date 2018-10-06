@@ -120,6 +120,9 @@ func existFile(path string) bool {
 	if stat.IsDir() {
 		return false
 	}
+	if stat.Size() == 0 {
+		return false
+	}
 	return true
 }
 
