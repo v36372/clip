@@ -11,7 +11,7 @@ echo "----------------------------------------------"
 ############ STEP 1
 echo "+ STEP 1: BEGIN CUTTING MKV FROM INPUT FILE"
 echo ""
-ffmpeg -i ./r/${filename}.mkv -c:v copy -c:a copy -ss 00:${mf}:${sf} -t 00:${mt}:${st} -async 1 -y -strict -2 ./vids/${outfile}.mkv
+ffmpeg -i ./r/${filename}.mkv -c:v copy -c:a aac -ss 00:${mf}:${sf} -t 00:${mt}:${st} -async 1 -y -strict -2 ./vids/${outfile}.mkv
 echo ""
 
 ########### STEP 2
