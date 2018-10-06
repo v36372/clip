@@ -33,7 +33,7 @@ echo ""
 
 ########### STEP 2
 echo "+ STEP 2: ENCODING ts FILES TO MKV $S_DIR/$STREAM_DIR/${a}.mkv"
-ffmpeg -i new.ts -c:v copy -c:a aac -strict -2 -y $S_DIR/$STREAM_DIR/${a}.mkv
+ffmpeg -i $S_DIR/$STREAM_DIR/${a}.ts -c:v copy -c:a aac -strict -2 -y $S_DIR/$STREAM_DIR/${a}.mkv
 echo ""
 rm $S_DIR/$STREAM_DIR/${a}.ts
 #mv new.mp4 old.mp4
