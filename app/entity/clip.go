@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path"
 	"strings"
+	"time"
 )
 
 type clipEntity struct {
@@ -171,6 +172,7 @@ func (c clipEntity) ExtractFromStream() (filename string, err error) {
 			return filename, nil
 		}
 		retries--
+		time.Sleep(5 * time.Second)
 	}
 
 	err = uer.InternalError(errors.New("Extracting video failed"))
