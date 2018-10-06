@@ -16,7 +16,7 @@ echo ""
 
 ########### STEP 2
 echo "+ STEP 2: GENERATE THUMBNAIL"
-ffmpeg -ss 5 -i ./vids/${outfile}.mkv -frames:v 1 -q:v 2 -vf "scale=200:100:force_original_aspect_ratio=increase,crop=200:100" ./../stream/public/images/${outfile}.jpg
+ffmpeg -ss 5 -i ./vids/${outfile}.mkv -frames:v 1 -q:v 2  -filter:v scale="260:-1" ./../stream/public/images/${outfile}.jpg
 echo ""
 #mv new.mp4 old.mp4
 #mv new.mkv latest.mkv
